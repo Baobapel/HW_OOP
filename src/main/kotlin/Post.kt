@@ -24,10 +24,11 @@ object WallService {
     private var posts = emptyArray<Post>()
     private var currentId = 0
 
-fun clear () {
-    posts = emptyArray<Post>()
-    var currentId = 0
-}
+    fun clear() {
+        posts = emptyArray<Post>()
+        currentId = 0
+    }
+
     fun add(post: Post): Post {
         posts += post.copy(id = ++currentId)
         return posts.last()
