@@ -10,6 +10,7 @@ data class Post(
     val replyOwnerId: Int = 1,
     val replyPostId: Int = 1,
     var friendsOnly: Boolean = true,
+    val comments: Comments = Comments(0, false, false, false, false)
 ) {
     data class Comments(
         val count: Int,
@@ -44,7 +45,8 @@ object WallService {
     fun update(newPost: Post): Boolean {
         for ((index, post) in posts.withIndex()) {
             if (post.id == newPost.id) {
-                posts[index] = newPost
+                val updatedPost = newPost.copy()
+                posts[index] = updatedPost
                 return true
             }
         }
