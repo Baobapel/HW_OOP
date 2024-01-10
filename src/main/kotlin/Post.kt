@@ -1,16 +1,18 @@
 package hw_oop
 
 data class Post(
-    val id: Int,
-    val text: String = "Text",
-    val ownerId: Int = 1,
-    val fromId: Int = 1,
-    val createdBy: Int = 1,
-    val date: Long = 1,
-    val replyOwnerId: Int = 1,
-    val replyPostId: Int = 1,
+    val id: Int?,
+    val text: String? = "Text",
+    val ownerId: Int? = 1,
+    val fromId: Int? = 1,
+    val createdBy: Int? = 1,
+    val date: Long? = 1,
+    val replyOwnerId: Int? = 1,
+    val replyPostId: Int? = 1,
     var friendsOnly: Boolean = true,
-    val comments: Comments = Comments(0, false, false, false, false)
+    val comments: Comments? = Comments(0, false, false, false, false),
+    val attachments: List<Attachment>? = emptyList()
+
 ) {
     data class Comments(
         val count: Int,
@@ -19,6 +21,69 @@ data class Post(
         val canClose: Boolean,
         val canOpen: Boolean
     )
+}
+
+interface Attachment {
+    val type: String
+}
+
+data class Audio(
+    val id: Int,
+    val ownerId: Int,
+    val artist: String,
+    val title: String,
+    val duration: Int
+)
+
+data class AudioAttachment(val audio: Audio) : Attachment {
+    override val type = "Audio"
+}
+
+data class Video(
+    val id: Int,
+    val ownerId: Int,
+    val title: String,
+    val description: String,
+    val duration: Int
+)
+
+data class VideoAttachment(val video: Video) : Attachment {
+    override val type = "Video"
+}
+
+data class Photo(
+    val id: Int,
+    val ownerId: Int,
+    val userId: Int,
+    val text: String
+)
+
+data class PhotoAttachment(
+    val photo: Photo,
+    override val type: String = "Photo"
+) : Attachment
+
+data class Sticker(
+    val productId: Int,
+    val stickerId: Int,
+    val isAllowed: Boolean,
+    val animationUrl: String
+)
+
+data class StickerAttachment(val sticker: Sticker) : Attachment {
+    override val type = "Sticker"
+}
+
+data class File(
+    val id: Int,
+    val ownerId: Int,
+    val title: String,
+    val size: Int,
+    val ext: String
+)
+
+data class FileAttachment(val file: File) : Attachment {
+    override val type = "File"
 }
 
 object WallService {
@@ -60,5 +125,33 @@ fun main() {
     WallService.printPosts()
     println(WallService.update(Post(2, "Update")))
     WallService.printPosts()
+
+    val photoAttachment = PhotoAttachment(Photo(
+        1,
+        1,
+        1,
+        "фотка"
+    ))
+    val videoAttachment = VideoAttachment(Video(
+        1,
+        1,
+        "Видео",
+        "ДР",
+        60
+    ))
+    val audioAttachment = AudioAttachment(Audio(
+        1,
+        1,
+        "artist",
+        "sing",
+        30
+    ))
+    val postWithAttachments = Post(
+        1,
+        text = "Post with Attachments",
+        attachments = listOf(photoAttachment, videoAttachment, audioAttachment)
+    )
+
+    println(postWithAttachments)
 }
 
