@@ -23,9 +23,8 @@ data class Post(
     )
 }
 
-interface Attachment {
-    val type: String
-}
+sealed class Attachment (val type: String)
+
 
 data class Audio(
     val id: Int,
@@ -35,9 +34,7 @@ data class Audio(
     val duration: Int
 )
 
-data class AudioAttachment(val audio: Audio) : Attachment {
-    override val type = "Audio"
-}
+data class AudioAttachment(val audio: Audio) : Attachment("audio")
 
 data class Video(
     val id: Int,
@@ -47,9 +44,8 @@ data class Video(
     val duration: Int
 )
 
-data class VideoAttachment(val video: Video) : Attachment {
-    override val type = "Video"
-}
+data class VideoAttachment(val video: Video) : Attachment("video")
+
 
 data class Photo(
     val id: Int,
@@ -60,8 +56,8 @@ data class Photo(
 
 data class PhotoAttachment(
     val photo: Photo,
-    override val type: String = "Photo"
-) : Attachment
+
+) : Attachment ("photo")
 
 data class Sticker(
     val productId: Int,
@@ -70,9 +66,7 @@ data class Sticker(
     val animationUrl: String
 )
 
-data class StickerAttachment(val sticker: Sticker) : Attachment {
-    override val type = "Sticker"
-}
+data class StickerAttachment(val sticker: Sticker) : Attachment ("sticker")
 
 data class File(
     val id: Int,
@@ -82,9 +76,7 @@ data class File(
     val ext: String
 )
 
-data class FileAttachment(val file: File) : Attachment {
-    override val type = "File"
-}
+data class FileAttachment(val file: File) : Attachment ("file")
 
 object WallService {
     private var posts = emptyArray<Post>()
@@ -120,11 +112,6 @@ object WallService {
 }
 
 fun main() {
-    WallService.add(Post(1, "Hi"))
-    WallService.add(Post(1, "Hello"))
-    WallService.printPosts()
-    println(WallService.update(Post(2, "Update")))
-    WallService.printPosts()
 
     val photoAttachment = PhotoAttachment(Photo(
         1,
