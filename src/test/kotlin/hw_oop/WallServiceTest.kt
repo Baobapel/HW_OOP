@@ -3,6 +3,8 @@ package hw_oop
 import org.junit.Test
 import org.junit.Assert.*
 import org.junit.Before
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNull
 
 class WallServiceTest {
 
@@ -42,6 +44,28 @@ class WallServiceTest {
 
         assertFalse(result)
 
+    }
+
+    @Test
+    fun addCommentToExistingPost() {
+        val wallService = WallService
+        val post = Post(id = 1, text = "Test post")
+        wallService.add(post)
+
+        val comment = Comments(id = 1, fromId = 2, date = System.currentTimeMillis(), text = "Nice comment")
+        val createdComment = wallService.createComment(post.id, comment)
+
+        assertEquals(comment, createdComment)
+
+    }
+
+
+    @Test(expected = WallService.PostNotFoundException::class)
+    fun throwPostNotFoundException() {
+        val wallService = WallService
+        val comment = Comments(id = 1, fromId = 2, date = System.currentTimeMillis(), text = "Nice comment")
+
+        wallService.createComment(2, comment)
     }
 
 }
