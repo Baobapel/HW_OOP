@@ -30,12 +30,8 @@ object WallService {
         val postIndex = posts.indexOfFirst { it.id == postId }
 
         if (postIndex != -1) {
-            val newComment = Comments(
-                id = comments.size + 1,
-                fromId = comment.fromId,
-                comment.date,
-                comment.text
-            )
+            val newComment = comment.copy(
+                id = comments.size + 1)
             comments = comments.plus(newComment)
 
             return newComment
@@ -54,6 +50,7 @@ object WallService {
 
     fun clear() {
         posts = emptyArray<Post>()
+        comments = emptyArray<Comments>()
         currentId = 0
     }
 

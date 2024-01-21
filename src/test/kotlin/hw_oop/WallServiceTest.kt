@@ -30,10 +30,7 @@ class WallServiceTest {
 
     }
 
-    @Before
-    fun clearBeforeTestFalse() {
-        WallService.clear()
-    }
+
     @Test
     fun updateExistingFalse(){
         WallService.add(Post(1, "1"))
